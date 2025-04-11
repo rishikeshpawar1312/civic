@@ -9,16 +9,15 @@ import FinalPostScreen from '../screens/FinalPostScreen';
 import FeedScreen from '../screens/FeedScreen';
 import MapScreen from '../screens/MapScreen';
 import ReportScreen from '../screens/ReportScreen';
-
-import RedditStyleFeed  from '../screens/RedditStyleFeed';
+import RedditStyleFeed from '../screens/RedditStyleFeed';
 import LoginScreen from '../screens/LoginPage';
+
 const Stack = createStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Logo">
-      <Stack.Screen name="RedditStyleFeed" component={RedditStyleFeed} />  
         <Stack.Screen name="Logo" component={LogoScreen} />
         <Stack.Screen name="LoginPage" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
@@ -28,6 +27,7 @@ function App() {
         <Stack.Screen name="Feed" component={FeedScreen} />
         <Stack.Screen name="Map" component={MapScreen} />
         <Stack.Screen name="Report" component={ReportScreen} />
+        <Stack.Screen name="RedditStyleFeed" component={RedditStyleFeed} />
       </Stack.Navigator>
     </NavigationContainer>
   );

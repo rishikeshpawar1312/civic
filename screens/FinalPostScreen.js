@@ -3,11 +3,11 @@ import { View, Image, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity 
 import { StatusBar } from 'expo-status-bar';
 
 function FinalPostScreen({ route, navigation }) {
-  const { imageUri, location, hashtags, tags } = route.params;
+  const { imageUri, location, hashtags, tags, category } = route.params;
   const [caption, setCaption] = useState('');
 
   const handlePost = () => {
-    const postData = { imageUri, location, hashtags, tags, caption };
+    const postData = { imageUri, location, hashtags, tags, caption,  };
     console.log('Posting:', postData);
     alert('Post created successfully!');
      navigation.navigate('Feed', { postData });
@@ -36,6 +36,8 @@ function FinalPostScreen({ route, navigation }) {
         )}
         <Text style={styles.tagsText}>Tags: {tags}</Text>
         <Text style={styles.hashtagsText}>{hashtags}</Text>
+        <Text style={styles.categoryText}>Category: {category}</Text>
+
       </View>
       <TouchableOpacity style={styles.postButton} onPress={handlePost}>
         <Text style={styles.postButtonText}>Post</Text>
@@ -85,6 +87,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  categoryText: {
+    fontSize: 14,
+    color: '#FF5733', // Different color for visibility
+    marginBottom: 5,
   },
 });
 

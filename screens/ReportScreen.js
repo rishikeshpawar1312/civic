@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { jsPDF } from "jspdf";
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 
-const ReportScreen = ({ route }) => {
+const ReportScreen = ({ route, navigation }) => {
   const { imageUri, location, hashtags, tags, caption } = route.params;
   const mapRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,7 +22,6 @@ const ReportScreen = ({ route }) => {
     pdf.text(`Hashtags: ${hashtags}`, 10, 30);
     pdf.text(`Tags: ${tags}`, 10, 40);
 
-    // Google Maps link
     const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${location.coords.latitude},${location.coords.longitude}`;
     pdf.setFont("helvetica", "bold");
     pdf.setTextColor(0, 0, 255);
@@ -38,7 +37,6 @@ const ReportScreen = ({ route }) => {
     await FileSystem.writeAsStringAsync(pdfUri, pdf.output('datauristring').split(',')[1], { encoding: FileSystem.EncodingType.Base64 });
     setIsLoading(false);
 
-    // Share the PDF
     if (await Sharing.isAvailableAsync()) {
       await Sharing.shareAsync(pdfUri);
     } else {
@@ -59,6 +57,11 @@ const ReportScreen = ({ route }) => {
       console.error("Error capturing map view:", error);
       return null;
     }
+  };
+
+  const handlePostToFeed = () => {
+    const postData = { imageUri, location, hashtags, tags, caption };
+    navigation.navigate('RedditStyleFeed', { postData });
   };
 
   return (
@@ -94,9 +97,14 @@ const ReportScreen = ({ route }) => {
       {isLoading ? (
         <ActivityIndicator size="large" color="#3897f0" style={styles.loadingIndicator} />
       ) : (
-        <TouchableOpacity style={styles.button} onPress={generatePDF}>
-          <Text style={styles.buttonText}>Generate PDF Report</Text>
-        </TouchableOpacity>
+        <>
+          {/* <TouchableOpacity style={styles.button} onPress={generatePDF}>
+            <Text style={styles.buttonText}>Generate PDF Report</Text>
+          </TouchableOpacity> */}
+          <TouchableOpacity style={styles.button} onPress={handlePostToFeed}>
+            <Text style={styles.buttonText}>Post to Feed</Text>
+          </TouchableOpacity>
+        </>
       )}
     </View>
   );
@@ -155,6 +163,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 8,
     elevation: 4,
+    marginVertical: 10, // Added spacing between buttons
   },
   buttonText: {
     color: '#ffffff',

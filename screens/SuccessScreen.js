@@ -14,7 +14,7 @@ function SuccessScreen({ navigation }) {
   const [hasAllPermissions, setHasAllPermissions] = useState(false);
   const [cameraProps, setCameraProps] = useState({
     zoom: 0,
-    facing: 'front',
+    facing: 'back',
     flash: 'on',
     animateShutter: false,
     enableTorch: false

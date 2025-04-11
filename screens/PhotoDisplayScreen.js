@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, Image, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import RNPickerSelect from 'react-native-picker-select';
 
 function PhotoDisplayScreen({ route, navigation }) {
   const { imageUri, location } = route.params;
   const [hashtags, setHashtags] = useState('');
   const [tags, setTags] = useState('');
+  const [category, setCategory] = useState('');
 
   const handleNext = () => {
     navigation.navigate('FinalPost', {
@@ -13,6 +15,7 @@ function PhotoDisplayScreen({ route, navigation }) {
       location,
       hashtags,
       tags,
+      category,
     });
   };
 
@@ -21,6 +24,25 @@ function PhotoDisplayScreen({ route, navigation }) {
       <StatusBar style="auto" />
       <Text style={styles.title}>Add Details</Text>
       <Image source={{ uri: imageUri }} style={styles.image} />
+
+      {/* Category Dropdown */}
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Select Problem Category:</Text>
+        <RNPickerSelect
+          onValueChange={(value) => setCategory(value)}
+          items={[
+            { label: 'Water Issue', value: 'water' },
+            { label: 'Potholes', value: 'potholes' },
+            { label: 'Electricity Issue', value: 'electricity' },
+            { label: 'Garbage', value: 'garbage' },
+            { label: 'Other', value: 'other' },
+          ]}
+          placeholder={{ label: 'Choose a category...', value: null }}
+          style={pickerSelectStyles}
+        />
+      </View>
+
+      {/* Hashtags & Tags Input */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -35,6 +57,7 @@ function PhotoDisplayScreen({ route, navigation }) {
           onChangeText={setTags}
         />
       </View>
+
       <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
         <Text style={styles.nextButtonText}>Next</Text>
       </TouchableOpacity>
@@ -57,22 +80,17 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    aspectRatio: 3/4,
+    aspectRatio: 3 / 4,
     marginBottom: 20,
-  },
-  locationContainer: {
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  locationText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
   },
   inputContainer: {
     width: '100%',
     marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
   input: {
     borderWidth: 1,
@@ -81,16 +99,34 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 5,
   },
-  saveButton: {
+  nextButton: {
     backgroundColor: '#007AFF',
     padding: 15,
     borderRadius: 5,
   },
-  saveButtonText: {
+  nextButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },
 });
+
+// Custom styles for Picker
+const pickerSelectStyles = {
+  inputIOS: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  inputAndroid: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+};
 
 export default PhotoDisplayScreen;
